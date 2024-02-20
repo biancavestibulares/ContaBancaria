@@ -14,14 +14,14 @@ public class Menu {
 		/*novaConta.setAgenciaConta(456);
 		System.out.println(novaConta.getAgenciaConta());*/
 		
-		if(novaConta.sacar(1000)) { //É aqui que declaramos o valor!
-			System.out.println("\nSaque efetuado com sucesso! O novo saldo é de: " + novaConta.getSaldo());
+		if(novaConta.sacar(1000)) {
+			System.out.println("Saque efetuado com sucesso! O novo saldo é de: " + novaConta.getSaldo());
 		} else {
-			System.out.println("\nO saldo é insuficiente!");
+			System.out.println("O saldo é insuficiente!");
 		}
 	
 		novaConta.depositar(5000);
-		System.out.println("\nO novo saldo é de: " + novaConta.getSaldo());
+		System.out.println("O novo saldo é de: " + novaConta.getSaldo());
 		
 	}
 
