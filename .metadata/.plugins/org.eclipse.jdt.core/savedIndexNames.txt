@@ -1,4 +1,3 @@
 INDEX VERSION 1.134+C:\Users\bianc\OneDrive\Área de Trabalho\TasksCanva\.metadata\.plugins\org.eclipse.jdt.core
-1943152555.index
 1865797976.index
 3413725848.index
