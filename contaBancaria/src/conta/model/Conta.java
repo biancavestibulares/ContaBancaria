@@ -1,10 +1,11 @@
 package conta.model;
 
+import java.util.Scanner;
+
 public class Conta {
 
 	//Adicionando os atributos da conta
-	//Atributos escolhidos foram titular, número da conta, tipo de conta, 
-	//saldo e status da conta
+	//Atributos escolhidos foram titular, agência da conta, tipo de conta, número da conta e saldo 
 	private String nomeTitular;
 	private int agenciaConta;
 	private int tipoConta;
@@ -19,6 +20,8 @@ public class Conta {
 		this.numeroConta = numeroConta;
 		this.saldo = saldo;
 	}
+	
+	public Conta() {}
 
 	//Métodos Getters and Setters
 	public String getNomeTitular() {
@@ -54,17 +57,18 @@ public class Conta {
 
 	//Método para depositar dinheiro
 	public void depositar(float valor) {
-		this.setSaldo(this.saldo + valor);
+		this.setSaldo(this.getSaldo() + valor);
 	}
 
 	//Método para sacar dinheiro
 	public boolean sacar(float valor) {
-		if(this.saldo < valor) {
+		if(this.getSaldo() < valor) {
+			System.out.println("\nSaldo insuficiente!");
 			return false;
+		} else {
+			this.setSaldo(this.getSaldo() - valor);
+			return true;
 		}
-
-		this.setSaldo(this.saldo - valor);
-		return true;
 	}
 
 	//Método de exibição dos dados
@@ -78,9 +82,14 @@ public class Conta {
 			break;
 		case 2:
 			tipo = "Conta poupança";
+			break;
+		default:
+			System.out.println("Opção inválida!");
+			break;
 		}
 
-		System.out.println("*************************************************");
+		//Imprimindo os dados recolhidos na classe Menu
+		System.out.println("\n*************************************************");
 		System.out.println("** Dados da conta **");
 		System.out.println("*************************************************");
 		System.out.println("\nNome do titular: " + this.nomeTitular);
