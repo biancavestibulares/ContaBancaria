@@ -7,7 +7,7 @@ public class ContaCorrente extends Conta{ //Herdando os atributos da classe Cont
 	
 	//Construtor
 	public ContaCorrente(String nomeTitular, int agenciaConta, int tipoConta, int numeroConta, float saldo, float limite) {
-		super(nomeTitular, agenciaConta, tipoConta, numeroConta, saldo);
+		super(nomeTitular, agenciaConta, tipoConta, numeroConta, saldo); //Construtor da classe-mãe (Conta)
 		this.limite = limite;
 	}
 

@@ -2,7 +2,7 @@ package conta.model;
 
 import java.util.Scanner;
 
-public class Conta {
+public abstract class Conta {
 
 	//Adicionando os atributos da conta
 	//Atributos escolhidos foram titular, agência da conta, tipo de conta, número da conta e saldo 
@@ -20,8 +20,6 @@ public class Conta {
 		this.numeroConta = numeroConta;
 		this.saldo = saldo;
 	}
-	
-	public Conta() {}
 
 	//Métodos Getters and Setters
 	public String getNomeTitular() {
@@ -83,21 +81,16 @@ public class Conta {
 		case 2:
 			tipo = "Conta poupança";
 			break;
-		default:
-			System.out.println("Opção inválida!");
-			break;
 		}
 
 		//Imprimindo os dados recolhidos na classe Menu
 		System.out.println("\n*************************************************");
 		System.out.println("** Dados da conta **");
-		System.out.println("*************************************************");
 		System.out.println("\nNome do titular: " + this.nomeTitular);
 		System.out.println("Agência da conta: " + this.agenciaConta);
 		System.out.println("Tipo de conta: " + tipo);
 		System.out.println("Número da conta: " + numeroConta);
 		System.out.println("Saldo da conta: " + saldo);
-		System.out.println("\n*************************************************");	
 	}
 
 
