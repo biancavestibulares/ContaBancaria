@@ -1,0 +1,33 @@
+package conta.model;
+
+public class ContaPoupanca extends Conta{ //Herdando os atributos da classe Conta
+
+	//Variável
+	private float valorMinimo;
+
+	//Construtor
+	public ContaPoupanca(String nomeTitular, int agenciaConta, int tipoConta, int numeroConta, float saldo, float minimo) {
+		super(nomeTitular, agenciaConta, tipoConta, numeroConta, saldo);
+		this.valorMinimo = minimo;
+	}
+
+	//Getter e Setter da variável valorMinimo
+	public float getMinimo() {
+		return valorMinimo;
+	}
+
+	public void setMinimo(float minimo) {
+		this.valorMinimo = minimo;
+	}
+
+	//Contas poupança tem valores mínimos para depositar dinheiro! Para isso, implementaremos um valor mínimo para bloquear depósitos de valores pequenos
+	@Override //Usar um método já existente na classe-mãe
+	public void depositar(float valor) {
+		if(this.getSaldo() + valor < 0) {
+			System.out.println("\nDepósito inválido!");
+		} else {
+			System.out.println("\nDepósito realizado com sucesso!");
+		}
+	}
+
+}
