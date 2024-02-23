@@ -1,7 +1,11 @@
 package conta;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.InputMismatchException;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
 
 import conta.model.Conta;
@@ -11,8 +15,9 @@ import conta.util.Cores;
 
 public class Menu {
 
+	static Scanner leia = new Scanner(System.in);
+
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		//Importação da classe "Conta" para fazer uso de seus atributos
 		Conta novaConta = new Conta(null, 0, 0, 0, 0) { //Aqui, declaramos os atributos com valores vazios para que o usuário os registre
 			//Temos que importar a Conta desta forma por ela ser uma classe abstract
@@ -23,105 +28,187 @@ public class Menu {
 		ContaPoupanca contaPoupanca = new ContaPoupanca(null, 0, 0, 0, 0, null);
 		Cores cores = new Cores();
 
-		//Variáveis
-		String nomeTitular = null;
-		int tipoConta = 0;
-		int numeroConta = 0;
-		float saldo = 0f;
-		float valorSaque = 0f;
-		float valorDeposito = 0f;
+		//Criando uma lista para adicionar diferentes contas
+		//Queue<String> clientesBanco = new LinkedList<String>();
 
-		//Scanner
-		Scanner leia = new Scanner(System.in);
+		//Variável para o Menu
+		int opcao = 0;
 
-		
-		//Declarando os valores das variáveis
-		//System.out.println(Cores.TEXT_WHITE + Cores.ANSI_PURPLE_BACKGROUND);
-		System.out.println("*************************************************");
-		System.out.println("** Informações Cliente **");
-		System.out.print("Digite o nome do titular: ");
-		nomeTitular = leia.next();
-		novaConta.setNomeTitular(nomeTitular); //Aqui, declaramos que o nomeTitular de Conta, é igual ao valor lido pelo scanner
+		while(true) {
+			//Imprimindo no console as opções do menu
+			System.out.println(Cores.TEXT_CYAN + Cores.ANSI_BLACK_BACKGROUND);
+			System.out.println("                                                 ");
+			System.out.println("                BIANCA TRUST BANK                ");
+			System.out.println("                                                 ");
+			System.out.println("*************************************************");
+			System.out.println("                                                 ");
+			System.out.println("     Opção 1 - Criar conta                       ");
+			System.out.println("     Opção 2 - Listar todas as contas            ");
+			System.out.println("     Opção 3 - Buscar conta por número           ");
+			System.out.println("     Opção 4 - Atualizar dados da conta          ");
+			System.out.println("     Opção 5 - Apagar conta                      ");
+			System.out.println("     Opção 6 - Sacar                             ");
+			System.out.println("     Opção 7 - Depositar                         ");
+			System.out.println("     Opção 8 - Tranferir valores entre contas    ");
+			System.out.println("     Opção 9 - Sair                              ");
+			System.out.println("                                                 ");
+			System.out.println("*************************************************");
+			System.out.println("                                                 ");
+			System.out.println(Cores.TEXT_RESET);
+			System.out.print("Insira a opção desejada: ");
+			System.out.println("                                                 ");
 
-		//Agência será uma váriavel já declarada pelo sistema!
-		novaConta.setAgenciaConta(2527);
-
-		System.out.println("\n** 1 para corrente, 2 para poupança **");
-		System.out.print("Informe o tipo da conta: ");
-		tipoConta = leia.nextInt();
-		novaConta.setTipoConta(tipoConta);
-
-		System.out.print("\nDigite o número da conta: ");
-		numeroConta = leia.nextInt();
-		novaConta.setNumeroConta(numeroConta);
-
-		System.out.print("\nDigite o saldo atual da conta: ");
-		saldo = leia.nextFloat();
-		novaConta.setSaldo(saldo);
-		contaCorrente.setSaldo(saldo);
-
-		float limiteSaque = saldo * 0.90f; //Aqui, estamos declarando que o limite será igual a 90% do saldo, 
-		//assim o usuário não poderá sacar mais do que tem na conta e também não poderá deixar sua conta vazia
-		contaCorrente.setLimite(limiteSaque);
-		
-		//Imprimindo os resultados de acordo com a classe do model
-		novaConta.visualizar();
-		
-		
-		//Efetuando os métodos de acordo com o tipo de conta selecionado
-		//No caso da conta for corrente, efetua o método dentro da classe contaCorrente
-		if(tipoConta == 1) { 
-			//Método de saque de dinheiro
-			System.out.println("\n*************************************************");
-			System.out.println("** Saque de Dinheiro **");
-			System.out.println("\nEsteja ciente que seu limite é de: " + contaCorrente.getLimite());
-			System.out.print("Informe a quantidade que deseja sacar: ");
-			valorSaque = leia.nextFloat(); //Declarando o valor de saque
-
-			//Efetuando o método de saque
-			if(valorSaque < limiteSaque) {
-				System.out.println("\nO saldo inicial de " + nomeTitular + " é igual a " + contaCorrente.getSaldo());
-				contaCorrente.sacar(valorSaque);
-				System.out.println("\nO saldo pós saque de " + nomeTitular + " é igual a " + contaCorrente.getSaldo());
-				System.out.println("\n*************************************************");
-				
-				System.exit(0); //Finaliza o sistema após realizar o método da conta corrente
-			} else {
-				System.out.println("\nLimite ultrapassado! O saldo não pode ser efetuado!");
-				System.out.println("\n*************************************************");
-				
-				System.exit(0); //Finaliza o sistema após realizar o método da conta corrente
+			//Criando um TryCatch no caso do usuário digitar uma String ao invés de um int
+			try {
+				opcao = leia.nextInt();
+			} catch (InputMismatchException e) { //InputMismatchException é um erro captado quando a devolução não é um int
+				System.err.println("\nExceção: " + e); //System.err.println imprime a exceção/erro - informa o usuário do problema encontrado
+				leia.nextLine();
+				System.out.println(Cores.TEXT_WHITE_BOLD + "Por favor, escolha uma das opções do Menu" + Cores.TEXT_RESET); //Instrução
 			}
-			
-		
-		//No caso da conta for poupança, efetua o método dentro da classe contaPoupança	
-		} else if(tipoConta == 2) {
-			//Método para data de aniversário da conta bancária
-			LocalDate dataAniv = LocalDate.now(); //LocalDate é capaz de pegar a data em tempo real
-			DateTimeFormatter formatadorData = DateTimeFormatter.ofPattern("dd/MM/yyyy"); //Definindo o formato que a data será exibida
-			String dataFormatada = dataAniv.format(formatadorData); //Formatando dataAniv
-			contaPoupanca.setDataAniversario(dataFormatada);
-			
-			System.out.println("Aniversário da conta: " + dataFormatada);
-			
-			//Método de depósito de dinheiro		
-			System.out.println("\n*************************************************");
-			System.out.println("** Depósito de Dinheiro **");
-			System.out.print("\nInforme a quantidade que deseja depositar: ");
-			valorDeposito = leia.nextFloat(); //Declarando o valor de depósito
 
-			novaConta.depositar(valorDeposito);
-			System.out.println("\nO novo saldo é de: " + novaConta.getSaldo());
-			System.out.println("\n*************************************************");
-			
-			System.exit(0); //Finaliza o sistema após realizar o método da conta poupança
-			
-		} else {
-			System.out.println("\nTipo de conta inválida!");
-			System.exit(0); //Fecha o sistema caso o tipo de conta seja inválido
+			//Criando casos para cada uma das opções
+			switch(opcao) {
+			case 1:
+				System.out.println(Cores.TEXT_WHITE + Cores.ANSI_BLACK_BACKGROUND);
+				System.out.println("                                                 ");
+				System.out.println("                   CRIAR CONTA                   ");
+				System.out.println("                                                 ");
+				System.out.println("*************************************************");
+				System.out.println("                                                 ");
+
+				System.out.println("Digite o nome do titular:                        ");
+				leia.nextLine();
+				String nomeTitular = leia.nextLine();
+				novaConta.setNomeTitular(nomeTitular);
+
+				System.out.println("Digite o número da agência:                      ");
+				int agenciaConta = leia.nextInt();
+				novaConta.setAgenciaConta(agenciaConta);
+
+				System.out.println("Digite o tipo da conta, 1 corrente, 2 poupança:  ");
+				int tipoConta = leia.nextInt();
+				novaConta.setTipoConta(tipoConta);
+				
+				if(tipoConta == 1) {
+					System.out.println("Digite o saldo mensal da conta:                  ");
+					float saldo = leia.nextFloat();
+					novaConta.setSaldo(saldo);
+					
+					System.out.println("Limite de crédito da conta:                      ");
+					float limiteSaque = saldo * 0.90f; //Aqui, estamos declarando que o limite será igual a 90% do saldo, 
+					//assim o usuário não poderá sacar mais do que tem na conta e também não poderá deixar sua conta vazia
+					contaCorrente.setLimite(limiteSaque);
+					System.out.println(limiteSaque);
+				
+				} else if(tipoConta == 2) {
+					//Método para data de aniversário da conta bancária
+					LocalDate dataAniv = LocalDate.now(); //LocalDate é capaz de pegar a data em tempo real
+					DateTimeFormatter formatadorData = DateTimeFormatter.ofPattern("dd/MM/yyyy"); //Definindo o formato que a data será exibida
+					String dataFormatada = dataAniv.format(formatadorData); //Formatando dataAniv
+					contaPoupanca.setDataAniversario(dataFormatada);
+
+					System.out.println("Aniversário da conta: " + dataFormatada);
+					
+				} else {
+					System.out.println("                                                 ");
+					System.out.println(Cores.TEXT_RED_BOLD + "Tipo de conta inválida!" + Cores.TEXT_RESET);
+				}
+				
+				System.out.println("                                                 ");
+				System.out.println("*************************************************");
+				System.out.println("                                                 ");
+				System.out.println(Cores.TEXT_RESET);
+				
+				continuarPrograma();
+				break;
+
+			case 2:
+				System.out.println("                                                 ");
+				System.out.println("             Listar todas as contas              ");
+				System.out.println("                                                 ");
+				System.out.println("*************************************************");
+
+				break;
+
+			case 3:
+				System.out.println("                                                 ");
+				System.out.println("            Buscar conta por número              ");
+				System.out.println("                                                 ");
+				System.out.println("*************************************************");
+
+				break;
+
+			case 4:
+				System.out.println("                                                 ");
+				System.out.println("            Atualizar dados da conta             ");
+				System.out.println("                                                 ");
+				System.out.println("*************************************************");
+
+				break;
+
+			case 5:
+				System.out.println("                                                 ");
+				System.out.println("                   Apagar conta                  ");
+				System.out.println("                                                 ");
+				System.out.println("*************************************************");
+
+				break;
+
+			case 6:
+				System.out.println("                                                 ");
+				System.out.println("                      Sacar                      ");
+				System.out.println("                                                 ");
+				System.out.println("*************************************************");
+
+				break;
+
+			case 7:
+				System.out.println("                                                 ");
+				System.out.println("                    Depositar                    ");
+				System.out.println("                                                 ");
+				System.out.println("*************************************************");
+
+				break;
+
+			case 8:
+				System.out.println("                                                 ");
+				System.out.println("          Tranferir valores entre contas         ");
+				System.out.println("                                                 ");
+				System.out.println("*************************************************");
+
+				break;
+
+			case 9:
+				System.out.println(Cores.TEXT_BLUE + Cores.ANSI_BLACK_BACKGROUND);
+				System.out.println("                                                 ");
+				System.out.println("  BIANCA TRUST BANK agradeçe pela confiança ;)   ");
+				novaConta.sobre();
+				System.out.println(Cores.TEXT_RESET);
+				System.exit(0);
+
+				continuarPrograma();
+				break;
+
+			default:
+				System.out.println(Cores.TEXT_RED_BOLD + "\nOpção Inválida!" + Cores.TEXT_RESET);
+				continuarPrograma();
+				break;
+			}
+
+		} //Fim do While
+
+	}
+
+	//Método que permite a execução do programa contínua
+	public static void continuarPrograma() {
+		try {
+			System.out.println("                                                 ");
+			System.out.println("Pressione Enter para continuar");
+			System.in.read();
+		} catch(IOException e) {
+			System.out.println("Pressione ENTER para continuar");
 		}
-		
-
 	}
 
 }

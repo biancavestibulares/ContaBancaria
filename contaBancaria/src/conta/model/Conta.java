@@ -1,6 +1,8 @@
 package conta.model;
 
-import java.util.Scanner;
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public abstract class Conta {
 
@@ -93,5 +95,17 @@ public abstract class Conta {
 		System.out.println("Saldo da conta: " + saldo);
 	}
 
+	//Método de exibição sobre
+	public void sobre() {
+		System.out.println("                                                 ");
+		System.out.println("*************************************************");
+		System.out.println("                                                 ");
+		System.out.println("Projeto desenvolvido por Bianca V. de Andrade    ");
+		System.out.println("github.com/biancavestibulares/ContaBancaria.git  ");
+		System.out.println("                                                 ");
+		System.out.println("*************************************************");
+		System.out.println("                                                 ");
+	}
 
+	
 }
