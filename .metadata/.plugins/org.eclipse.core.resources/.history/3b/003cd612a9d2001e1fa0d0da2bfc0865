@@ -1,0 +1,81 @@
+package conta.controller;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import conta.model.Conta;
+import conta.repository.ContaRepository;
+import conta.util.Cores;
+
+public class ContaController implements ContaRepository{
+	//Import da classe Cores
+	Cores cores = new Cores();
+	
+	//Criando um ArrayList para guardar os dados das contas cadastradas
+	private ArrayList<Conta> listaContas = new ArrayList<Conta>();
+
+	////Variável trabalhada em contaRepositorio
+	int numero = 0; 
+
+	//Implementando todos os Métodos da Interface ContaRepository
+	@Override
+	public void cadastrar(Conta conta) {
+		// TODO Auto-generated method stub
+		listaContas.add(conta);
+		System.out.println(Cores.TEXT_CYAN_BOLD + "A " + conta.getNumeroConta() + "° foi criada com sucesso!" + Cores.TEXT_RESET);
+	}
+
+	@Override
+	public void listarTodas() {
+		// TODO Auto-generated method stub
+		for(var conta : listaContas) {
+			if(conta.equals(null)) { //Identificar se a lista está vazia e retornar algo
+				System.out.println("A lista está vazia!");
+			} else {
+				conta.visualizar();
+			}
+		}
+	}
+
+	@Override
+	public void procurarPorNumero(int numero) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void atualizar(Conta conta) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void deletar(int numero) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void sacar(int numero, float valor) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void depositar(int numero, float valor) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void transferir(int numeroRemetente, int numeroDestinatario, float valor) {
+		// TODO Auto-generated method stub
+
+	}
+
+	//Cada conta criada é identificada por um número
+	public int gerarNumero() {
+		return ++ numero; //Aumenta um número sempre que uma conta é cadastrada
+	}
+
+}

@@ -1,0 +1,146 @@
+package conta;
+
+import java.util.InputMismatchException;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+import conta.model.Conta;
+import conta.model.ContaCorrente;
+import conta.model.ContaPoupanca;
+import conta.util.Cores;
+
+public class Menu1 {
+	
+	static Scanner leia = new Scanner(System.in);
+	
+	public static void main(String[] args) {
+		//Importação da classe "Conta" para fazer uso de seus atributos
+		Conta novaConta = new Conta(null, null, 0, 0, 0) { //Aqui, declaramos os atributos com valores vazios para que o usuário os registre
+			//Temos que importar a Conta desta forma por ela ser uma classe abstract
+		};
+		//É imaginado que o usuário seja algum REPRESENTANTE do banco
+		//Import de outras classes
+		ContaCorrente contaCorrente = new ContaCorrente(null, null, 0, 0, 0, 0);
+		ContaPoupanca contaPoupanca = new ContaPoupanca(null, null, 0, 0, 0, null);
+		Cores cores = new Cores();
+		
+		//Criando uma lista para adicionar diferentes contas
+		//Queue<String> clientesBanco = new LinkedList<String>();
+		
+		//Variável para o Menu
+		int opcao;
+		
+		//Demais variáveis
+		float valorSaque = 0f;
+		float valorDeposito = 0f;
+		boolean loop = true;
+		boolean loop2 = true;
+		
+		while(true) {
+			//Imprimindo no console as opções do menu
+			System.out.println(Cores.TEXT_BLUE + Cores.ANSI_BLACK_BACKGROUND);
+			System.out.println("                                                 ");
+			System.out.println("                BIANCA TRUST BANK                ");
+			System.out.println("                                                 ");
+			System.out.println("*************************************************");
+			System.out.println("                                                 ");
+			System.out.println("       Opção 1 - Criar conta                     ");
+			System.out.println("       Opção 2 - Listar todas as contas          ");
+			System.out.println("       Opção 3 - Buscar conta por número         ");
+			System.out.println("       Opção 4 - Atualizar dados da conta        ");
+			System.out.println("       Opção 5 - Apagar conta                    ");
+			System.out.println("       Opção 6 - Sacar                           ");
+			System.out.println("       Opção 7 - Depositar                       ");
+			System.out.println("       Opção 8 - Tranferir valores entre contas  ");
+			System.out.println("       Opção 9 - Sair                            ");
+			System.out.println("                                                 ");
+			System.out.println("*************************************************");
+			System.out.println("                                                 ");
+			System.out.println(Cores.TEXT_RESET);
+			System.out.print("Insira a opção desejada: ");
+			
+			opcao = leia.nextInt();
+			
+			//Criando casos para cada uma das opções
+			switch(opcao) {
+			case 1:
+				System.out.println("\n                   Criar Conta                   ");
+				System.out.println("\n*************************************************");
+				
+				System.out.print("\nDigite o nome do titular: ");
+				leia.nextLine();
+				String nomeTitular = leia.nextLine();
+				novaConta.setNomeTitular(nomeTitular);
+				
+				//Agência será uma váriavel já declarada pelo sistema!
+				novaConta.setAgenciaConta("Bianca's Associates");
+				
+				System.out.print("Informe o tipo da conta (1 corrente, 2 poupança): ");
+				leia.nextLine();
+				int tipoConta = leia.nextInt();
+				novaConta.setTipoConta(tipoConta);
+				
+				break;
+				
+			case 2:
+				System.out.println("\n             Listar todas as contas              ");
+				System.out.println("\n*************************************************");
+				
+				break;
+				
+			case 3:
+				System.out.println("\n            Buscar conta por número              ");
+				System.out.println("\n*************************************************");
+				
+				break;
+				
+			case 4:
+				System.out.println("\n            Atualizar dados da conta             ");
+				System.out.println("\n*************************************************");
+				
+				break;
+				
+			case 5:
+				System.out.println("\n                   Apagar conta                  ");
+				System.out.println("\n*************************************************");
+				
+				break;
+				
+			case 6:
+				System.out.println("\n                      Sacar                      ");
+				System.out.println("\n*************************************************");
+				
+				break;
+				
+			case 7:
+				System.out.println("\n                    Depositar                    ");
+				System.out.println("\n*************************************************");
+				
+				break;
+				
+			case 8:
+				System.out.println("\n          Tranferir valores entre contas         ");
+				System.out.println("\n*************************************************");
+				
+				break;
+				
+			case 9:
+				System.out.println("\n    BIANCA TRUST BANK agradeçe pela confiança    ");
+				novaConta.sobre();
+				System.exit(0);
+				
+				break;
+			
+			default:
+				System.out.println(Cores.TEXT_RED_BOLD + "\nOpção Inválida!" + Cores.TEXT_RESET);
+				break;
+			}
+			
+		} //Fim do While
+		
+	
+		
+	}
+	
+}
