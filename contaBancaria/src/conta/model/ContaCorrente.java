@@ -37,6 +37,7 @@ public class ContaCorrente extends Conta{ //Herdando os atributos da classe Cont
 	public void visualizar() {
 		super.visualizar();
 		System.out.println("Limite de crédito da conta: " + this.limite);
+		System.out.println("\n*************************************************");
 	}
 	
 }

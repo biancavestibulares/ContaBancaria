@@ -26,6 +26,7 @@ public class ContaPoupanca extends Conta{ //Herdando os atributos da classe Cont
 	public void visualizar() {
 		super.visualizar();
 		System.out.println("Aniversário da conta: " + this.dataAniversario);
+		System.out.println("\n*************************************************");
 	}
 
 }

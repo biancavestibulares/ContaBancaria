@@ -86,13 +86,18 @@ public abstract class Conta {
 		}
 
 		//Imprimindo os dados recolhidos na classe Menu
-		System.out.println("\n*************************************************");
-		System.out.println("** Dados da conta **");
+		System.out.println("                                                 ");
+		System.out.println("*************************************************");
+		System.out.println("\n                 Dados da conta                  ");
 		System.out.println("\nNome do titular: " + this.nomeTitular);
 		System.out.println("Agência da conta: " + this.agenciaConta);
 		System.out.println("Tipo de conta: " + tipo);
 		System.out.println("Número da conta: " + numeroConta);
 		System.out.println("Saldo da conta: " + saldo);
+	}
+	
+	public void listaVazia() {
+		
 	}
 
 	//Método de exibição sobre
