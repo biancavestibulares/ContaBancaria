@@ -3,20 +3,20 @@ package conta.model;
 public class ContaPoupanca extends Conta{ //Herdando os atributos da classe Conta
 	
 	//Variável
-	private String dataAniversario;
+	private int dataAniversario;
 	
 	//Construtor
-	public ContaPoupanca(String nomeTitular, int agenciaConta, int tipoConta, int numeroConta, float saldo, String dataAniversario) {
+	public ContaPoupanca(String nomeTitular, int agenciaConta, int tipoConta, int numeroConta, float saldo, int dataAniversario) {
 		super(nomeTitular, agenciaConta, tipoConta, numeroConta, saldo); //Construtor da classe-mãe (Conta)
 		this.dataAniversario = dataAniversario;
 	}
 
 	//Getter e Setter da variável dataAniversario
-	public String getDataAniversario() {
+	public int getDataAniversario() {
 		return dataAniversario;
 	}
 
-	public void setDataAniversario(String dataAniversario) {
+	public void setDataAniversario(int dataAniversario) {
 		this.dataAniversario = dataAniversario;
 	}
 	

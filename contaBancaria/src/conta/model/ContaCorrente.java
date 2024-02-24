@@ -25,10 +25,11 @@ public class ContaCorrente extends Conta{ //Herdando os atributos da classe Cont
 	public boolean sacar(float valor) {
 		if(this.getSaldo() + this.getLimite() < valor) {
 			System.out.println("\nSaldo insuficiente!");
+			System.out.println("                                                 ");
+			System.out.println("*************************************************");
 			return false;
 		} else {
 			this.setSaldo(this.getSaldo() - valor);
-			System.out.println("\nValor sacado com sucesso!");
 			return true;
 		}	
 	}

@@ -1,11 +1,7 @@
 package conta;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Scanner;
 
 import conta.controller.ContaController;
@@ -26,7 +22,7 @@ public class Menu {
 		//É imaginado que o usuário seja algum REPRESENTANTE do banco
 		//Import de outras classes
 		ContaCorrente contaCorrente = new ContaCorrente(null, 0, 0, 0, 0, 0);
-		ContaPoupanca contaPoupanca = new ContaPoupanca(null, 0, 0, 0, 0, null);
+		ContaPoupanca contaPoupanca = new ContaPoupanca(null, 0, 0, 0, 0, 0);
 		ContaController contas = new ContaController();
 		Cores cores = new Cores();
 
@@ -34,9 +30,9 @@ public class Menu {
 		int opcao = 0;
 
 		//Variáveis de Conta
-		String nomeTitular, dataFormada;
-		int agenciaConta = 0, numeroConta = 0, tipoConta;
-		float saldo = 0;
+		String nomeTitular;
+		int agenciaConta = 0, numero = 0, tipoConta = 0, dataAniversario = 0, numeroDestino = 0;
+		float saldo = 0, limite = 0, valor = 0, valor1 = 0;
 
 		while(true) {
 			//Imprimindo no console as opções do menu
@@ -73,9 +69,11 @@ public class Menu {
 
 			//Criando casos para cada uma das opções
 			switch(opcao) {
-			case 1:
+			case 1: //Criar conta
 				//Variáveis TryCatch
 				boolean loop = true;
+				boolean loop0 = true;
+				boolean loop1 = true;
 				boolean loop2 = true;
 				boolean loop3 = true;
 
@@ -89,112 +87,127 @@ public class Menu {
 
 				//Declarando os valores das variáveis
 				//Nome do titular
-				System.out.print("Digite o nome do titular: ");
-				System.out.println(Cores.TEXT_WHITE_BOLD);
-				leia.nextLine();
+				System.out.println("Digite o nome do titular: ");
+				System.out.print(Cores.TEXT_WHITE_BOLD);
+				leia.skip("\\R?");
 				nomeTitular = leia.nextLine();
-				novaConta.setNomeTitular(nomeTitular);
 				System.out.println(Cores.TEXT_RESET + Cores.TEXT_CYAN);
 
 				//Agência do titular
 				//Criando um TryCatch para impedir que o usuário digite um valor incorreto
 				do {
 					try {
-						System.out.print("Digite o número da agência: ");
-						System.out.println(Cores.TEXT_WHITE_BOLD);
+						System.out.println("Digite o número da agência: ");
+						System.out.print(Cores.TEXT_WHITE_BOLD);
 						agenciaConta = leia.nextInt();
-						novaConta.setAgenciaConta(agenciaConta);
 						System.out.println(Cores.TEXT_RESET + Cores.TEXT_CYAN);
 
 						loop = false;
 
-					//Caso o usuário insira um valor diferente de int, o programa não fecha, mas informa o usuário e dá a oportunidade de inserir um valor int
+						//Caso o usuário insira um valor diferente de int, o programa não fecha, mas informa o usuário e dá a oportunidade de inserir um valor int
 					} catch (InputMismatchException e) { //Devolução de erro
 						System.out.println("                                                 ");
 						System.err.println(Cores.TEXT_RED + "Exceção: " + e + Cores.TEXT_RESET); 
 						leia.nextLine();
 						System.out.println(Cores.TEXT_RED_BOLD + "Digite um número inteiro!" + Cores.TEXT_RESET + Cores.TEXT_CYAN);
+						System.out.println("                                                 ");
 					} 
 				} while(loop);
 
-				//Tipo de conta
-				System.out.print("Digite o tipo da conta, 1 corrente, 2 poupança: ");
-				System.out.println(Cores.TEXT_WHITE_BOLD);
-				tipoConta = leia.nextInt();
-				novaConta.setTipoConta(tipoConta);
-				System.out.println(Cores.TEXT_RESET + Cores.TEXT_CYAN);
+				//Tipo de conta				
+				do {
+					try {
+						System.out.print("Digite o tipo da conta, 1 corrente, 2 poupança: ");
+						System.out.println(Cores.TEXT_WHITE_BOLD);
+						tipoConta = leia.nextInt();
+						System.out.println(Cores.TEXT_RESET + Cores.TEXT_CYAN);
 
-				
-				//Efetuando os métodos de acordo com o tipo de conta selecionado
-				//No caso da conta for corrente, efetua o método dentro da classe contaCorrente
-				if(tipoConta == 1) {//Conta Corrente
-					
-					do {
-						try {
-							//Saldo mensal
-							System.out.print("Digite o saldo mensal da conta: ");
-							System.out.println(Cores.TEXT_WHITE_BOLD);
-							saldo = leia.nextFloat();
-							novaConta.setSaldo(saldo);
-							System.out.println(Cores.TEXT_RESET + Cores.TEXT_CYAN);
+						loop0 = false;
+					} catch(InputMismatchException e) {
+						System.out.println("                                                 ");
+						System.err.println(Cores.TEXT_RED + "Exceção: " + e + Cores.TEXT_RESET); 
+						leia.nextLine();
+						System.out.println(Cores.TEXT_RED_BOLD + "Digite um número inteiro!" + Cores.TEXT_RESET + Cores.TEXT_CYAN);
+						System.out.println("                                                 ");
+					}
+				}while(loop0 && tipoConta < 1 && tipoConta > 2);
 
-							//Limite - optei por já deixá-lo declarado
-							float limiteSaque = saldo  * 0.90f; //Aqui, estamos declarando que o limite será igual a 90% do saldo, 
-							//assim o usuário não poderá sacar mais do que tem na conta e também não poderá deixar sua conta vazia
-							contaCorrente.setLimite(limiteSaque);
-							System.out.print("Limite de crédito da conta: ");
-							System.out.println(Cores.TEXT_WHITE_BOLD + limiteSaque + Cores.TEXT_RESET + Cores.TEXT_CYAN);
+				//Saldo mensal
+				do {
+					try {
+						System.out.print("Digite o saldo mensal da conta (R$): ");
+						System.out.println(Cores.TEXT_WHITE_BOLD);
+						saldo = leia.nextFloat();
+						System.out.println(Cores.TEXT_RESET + Cores.TEXT_CYAN);
 
-							System.out.println("\n");
-							//Cadastra as informações fornecidas pelo usuário, e o salva como uma conta do Array/Lista de contas
-							contas.cadastrar(new ContaCorrente(nomeTitular, agenciaConta, tipoConta, contas.gerarNumero(), saldo, limiteSaque));
+						loop1 = false;
 
-							loop2 = false;
+					} catch (InputMismatchException e) { //Devolução de erro
+						System.out.println("                                                 ");
+						System.err.println(Cores.TEXT_RED + "Exceção: " + e + Cores.TEXT_RESET); 
+						leia.nextLine();
+						System.out.println(Cores.TEXT_RED_BOLD + "Digite um número inteiro!" + Cores.TEXT_RESET + Cores.TEXT_CYAN);
+						System.out.println("                                                 ");
+					} 
+				} while(loop1);
 
-						} catch (InputMismatchException e) { //Devolução de erro
-							System.out.println("                                                 ");
-							System.err.println(Cores.TEXT_RED + "Exceção: " + e + Cores.TEXT_RESET); 
-							leia.nextLine();
-							System.out.println(Cores.TEXT_RED_BOLD + "Digite um número inteiro!" + Cores.TEXT_RESET + Cores.TEXT_CYAN);
-						} 
-					} while(loop2);
+				if(tipoConta == 1 || tipoConta == 2) {
+					switch(tipoConta) {
+					case 1 -> {
+						//Executando um TryCatch em caso do usuário escrever uma variável que se diferencie de int
+						do {
+							try {
+								//Limite de saque
+								System.out.print("Digite o limite de crédito da conta (R$): ");
+								System.out.println(Cores.TEXT_WHITE_BOLD);
+								limite = leia.nextFloat();
+								System.out.println(Cores.TEXT_RESET + Cores.TEXT_CYAN);
 
-				} else if(tipoConta == 2) { //Conta Poupança
+								System.out.println("\n");
+								//Cadastra as informações fornecidas pelo usuário, e o salva como uma conta do Array/Lista de contas
+								contas.cadastrar(new ContaCorrente(nomeTitular, agenciaConta, tipoConta, contas.gerarNumero(), saldo, limite));
+								loop2 = false;
 
-					do {
-						try {
-							//Saldo mensal
-							System.out.print("Digite o saldo mensal da conta: ");
-							System.out.println(Cores.TEXT_WHITE_BOLD);
-							saldo = leia.nextFloat();
-							novaConta.setSaldo(saldo);
-							System.out.println(Cores.TEXT_RESET + Cores.TEXT_CYAN);
+								//Caso o usuário insira um valor diferente de int, o programa não fecha, mas informa o usuário e dá a oportunidade de inserir um valor int
+							} catch (InputMismatchException e) { //Devolução de erro
+								System.out.println("                                                 ");
+								System.err.println(Cores.TEXT_RED + "Exceção: " + e + Cores.TEXT_RESET); 
+								leia.nextLine();
+								System.out.println(Cores.TEXT_RED_BOLD + "Digite um número inteiro!" + Cores.TEXT_RESET + Cores.TEXT_CYAN);
+								System.out.println("                                                 ");
+							} 
+						} while(loop2);
 
-							//Data de aniversário - já declarei a variável, pois como o usuário cria a conta na hora, nada mais justo que o aniversário ser o dia da criação
-							//Método para data de aniversário da conta bancária
-							LocalDate dataAniv = LocalDate.now(); //LocalDate é capaz de pegar a data em tempo real
-							DateTimeFormatter formatadorData = DateTimeFormatter.ofPattern("dd/MM/yyyy"); //Definindo o formato que a data será exibida
-							String dataFormatada = dataAniv.format(formatadorData); //Formatando dataAniv
-							contaPoupanca.setDataAniversario(dataFormatada);
+					}
 
-							System.out.println("Aniversário da conta: ");
-							System.out.println(Cores.TEXT_WHITE_BOLD + dataFormatada + Cores.TEXT_RESET + Cores.TEXT_CYAN);
+					case 2 -> {
+						do {
+							try {
+								//Data de aniversário da conta
+								System.out.print("Digite o dia do aniversário da conta: ");
+								System.out.println(Cores.TEXT_WHITE_BOLD);
+								dataAniversario = leia.nextInt();
+								System.out.println(Cores.TEXT_RESET + Cores.TEXT_CYAN);
 
-							System.out.println("\n");
-							//Cadastra as informações fornecidas pelo usuário, e o salva como uma conta do Array/Lista de contas
-							contas.cadastrar(new ContaPoupanca(nomeTitular, agenciaConta, tipoConta, contas.gerarNumero(), saldo, dataFormatada));
+								System.out.println("\n");
+								//Cadastra as informações fornecidas pelo usuário, e o salva como uma conta do Array/Lista de contas
+								contas.cadastrar(new ContaPoupanca(nomeTitular, agenciaConta, tipoConta, contas.gerarNumero(), saldo, dataAniversario));
 
-							loop3 = false;
+								loop3 = false;
 
-						} catch (InputMismatchException e) {//Devolução de erro
-							System.out.println("                                                 ");
-							System.err.println(Cores.TEXT_RED + "Exceção: " + e + Cores.TEXT_RESET); 
-							leia.nextLine();
-							System.out.println(Cores.TEXT_RED_BOLD + "Digite um número inteiro!" + Cores.TEXT_RESET + Cores.TEXT_CYAN);
-						} 
-					} while(loop3);
+							}catch (InputMismatchException e) { //Devolução de erro
+								System.out.println("                                                 ");
+								System.err.println(Cores.TEXT_RED + "Exceção: " + e + Cores.TEXT_RESET); 
+								leia.nextLine();
+								System.out.println(Cores.TEXT_RED_BOLD + "Digite um número inteiro!" + Cores.TEXT_RESET + Cores.TEXT_CYAN);
+								System.out.println("                                                 ");
+							} 
+						} while(loop3);
 
-				} else { //Caso o usuário escolha um tipo de conta diferente de 1 ou 2
+					}
+					} //Fim do SwitchCase
+
+				} else {
 					System.out.println("                                                 ");
 					System.out.println(Cores.TEXT_RED_BOLD + "Tipo de conta inválida!" + Cores.TEXT_RESET);
 				}
@@ -206,7 +219,7 @@ public class Menu {
 				continuarPrograma();
 				break;
 
-			case 2:
+			case 2: //Listar contas
 				System.out.println(Cores.TEXT_YELLOW);
 				System.out.println("*************************************************");
 				System.out.println("                                                 ");
@@ -222,7 +235,7 @@ public class Menu {
 				continuarPrograma();
 				break;
 
-			case 3:
+			case 3: //Buscar conta por número
 				//Variável TryCatch
 				boolean loop4 = true;
 
@@ -239,7 +252,7 @@ public class Menu {
 						//Declarando os valor das variável número
 						System.out.print("\nDigite o número da conta que deseja buscar: ");
 						System.out.println(Cores.TEXT_WHITE_BOLD);
-						int numero = leia.nextInt();
+						numero = leia.nextInt();
 						System.out.println(Cores.TEXT_RESET + Cores.TEXT_PURPLE_BRIGHT);
 
 						//Devolve a conta encontrada
@@ -252,17 +265,20 @@ public class Menu {
 						System.out.println("                                                 ");
 						System.err.println(Cores.TEXT_RED + "Exceção: " + e + Cores.TEXT_RESET); 
 						leia.nextLine();
-						System.out.println(Cores.TEXT_RED_BOLD + "Digite um número inteiro!" + Cores.TEXT_RESET + Cores.TEXT_PURPLE); //Instrução
+						System.out.println(Cores.TEXT_RED_BOLD + "Digite um número inteiro!" + Cores.TEXT_RESET + Cores.TEXT_PURPLE_BRIGHT); //Instrução
 					}
 				} while(loop4);
 
 				continuarPrograma();
 				break;
 
-			case 4:
-				//Variável TryCatch
+			case 4: //Atualizar conta
+				//Variáveis TryCatch
 				boolean loop5 = true;
 				boolean loop6 = true;
+				boolean loop7 = true;
+				boolean loop8 = true;
+				boolean loop9 = true;
 
 				System.out.println(Cores.TEXT_BLUE_BRIGHT);
 				System.out.println("*************************************************");
@@ -271,132 +287,16 @@ public class Menu {
 				System.out.println("                                                 ");
 				System.out.println("*************************************************");
 
-				//NÃO DEU CERTO DE JEITO NENHUM :( 
-				//Fiquei presa nisso até tarde, por isso não busquei ajuda dos meus colegas com consciência de que é uma sexta-feira e já são 22h da noite
-				
-				/*//Implementando o método de busca por conta para atualizar a conta desejada pelo usuário
-				//TryCatch para impedir que o usuário busque por um valor diferente de int
+				//As funções executadas a seguir, serão exatamente iguais as funções de CRIAR CONTA
+				//No entanto, o usuário não pode mudar o tipo de conta! Apenas o conteúdo das case selecionada no cadastro
+				//TryCatch 
 				do {
 					try {
 						//Declarando os valor das variável número
 						System.out.print("\nDigite o número da conta que deseja atualizar: ");
 						System.out.println(Cores.TEXT_WHITE_BOLD);
-						int numero = leia.nextInt();
+						numero = leia.nextInt();
 						System.out.println(Cores.TEXT_RESET + Cores.TEXT_BLUE_BRIGHT);
-
-						var buscarConta = contas.buscarNaCollection(numero);
-
-						if(buscarConta != null) {
-							
-							tipoConta = buscarConta.getTipoConta();
-
-							System.out.print("Digite o nome do titular: ");
-							System.out.println(Cores.TEXT_WHITE_BOLD);
-							leia.skip("\\R?");
-							nomeTitular = leia.nextLine();
-							System.out.println(Cores.TEXT_RESET + Cores.TEXT_BLUE_BRIGHT);
-
-							//Criando um TryCatch para impedir que o usuário digite um valor incorreto
-							do {
-								try {
-									System.out.print("Digite o número da agência: ");
-									System.out.println(Cores.TEXT_WHITE_BOLD);
-									agenciaConta = leia.nextInt();
-									System.out.println(Cores.TEXT_RESET + Cores.TEXT_BLUE_BRIGHT);
-
-									loop6 = false;
-
-								} catch (InputMismatchException e) { //Devolução de erro
-									System.out.println("                                                 ");
-									System.err.println(Cores.TEXT_RED + "Exceção: " + e + Cores.TEXT_RESET); 
-									leia.nextLine();
-									System.out.println(Cores.TEXT_RED_BOLD + "Digite um número inteiro!" + Cores.TEXT_RESET + Cores.TEXT_BLUE_BRIGHT);
-								} 
-							} while(loop6);
-
-							float limiteSaque = saldo  * 0.90f; //Aqui, estamos declarando que o limite será igual a 90% do saldo, 
-							//assim o usuário não poderá sacar mais do que tem na conta e também não poderá deixar sua conta vazia
-							contaCorrente.setLimite(limiteSaque);
-							System.out.println("Limite de crédito da conta: ");
-							System.out.println(Cores.TEXT_WHITE_BOLD + limiteSaque + Cores.TEXT_RESET + Cores.TEXT_BLUE_BRIGHT);
-							
-							//Método para data de aniversário da conta bancária
-							LocalDate dataAniv = LocalDate.now(); //LocalDate é capaz de pegar a data em tempo real
-							DateTimeFormatter formatadorData = DateTimeFormatter.ofPattern("dd/MM/yyyy"); //Definindo o formato que a data será exibida
-							String dataFormatada = dataAniv.format(formatadorData); //Formatando dataAniv
-							contaPoupanca.setDataAniversario(dataFormatada);
-
-							System.out.println("Aniversário da conta: ");
-							System.out.println(Cores.TEXT_WHITE_BOLD + dataFormatada + Cores.TEXT_RESET + Cores.TEXT_BLUE_BRIGHT);
-							
-							switch(tipoConta) {
-							case 1 -> {
-								boolean loop7 = true;
-								
-								do {
-									try {
-										System.out.print("Digite o saldo mensal da conta: ");
-										System.out.println(Cores.TEXT_WHITE_BOLD);
-										saldo = leia.nextFloat();
-										novaConta.setSaldo(saldo);
-										System.out.println(Cores.TEXT_RESET + Cores.TEXT_BLUE_BRIGHT);
-										
-										
-										System.out.println("\n");
-										contas.atualizar(new ContaCorrente(nomeTitular, agenciaConta, tipoConta, numeroConta, saldo, limiteSaque));
-
-										loop7 = false;
-
-									} catch (InputMismatchException e) { //Devolução de erro
-										System.out.println("                                                 ");
-										System.err.println(Cores.TEXT_RED + "Exceção: " + e + Cores.TEXT_RESET); 
-										leia.nextLine();
-										System.out.println(Cores.TEXT_RED_BOLD + "Digite um número inteiro!" + Cores.TEXT_RESET + Cores.TEXT_BLUE_BRIGHT);
-									} 
-								} while(loop7);
-							}
-
-							case 2 -> {
-								boolean loop8 = true;
-								
-								do {
-									try {
-										System.out.print("Digite o saldo mensal da conta: ");
-										System.out.println(Cores.TEXT_WHITE_BOLD);
-										saldo = leia.nextFloat();
-										novaConta.setSaldo(saldo);
-										System.out.println(Cores.TEXT_RESET + Cores.TEXT_BLUE_BRIGHT);
-
-										System.out.println("\n");
-										contas.atualizar(new ContaPoupanca(nomeTitular, agenciaConta, tipoConta, numeroConta, saldo, dataFormatada));
-
-										loop8 = false;
-
-									} catch (InputMismatchException e) {//Devolução de erro
-										System.out.println("                                                 ");
-										System.err.println(Cores.TEXT_RED + "Exceção: " + e + Cores.TEXT_RESET); 
-										leia.nextLine();
-										System.out.println(Cores.TEXT_RED_BOLD + "Digite um número inteiro!" + Cores.TEXT_RESET + Cores.TEXT_BLUE_BRIGHT);
-									} 
-								} while(loop8);
-							}
-							
-							default -> {
-								System.out.println(Cores.TEXT_BLUE_BOLD + "Tipo de conta inválida!" + Cores.TEXT_RESET + Cores.TEXT_BLUE_BRIGHT);
-							}
-							} //Fim do SwitchCase
-
-							System.out.println(Cores.TEXT_BLUE_BRIGHT);
-							System.out.println("*************************************************");
-							System.out.println(Cores.TEXT_RESET);
-
-						} else {
-							System.out.println(Cores.TEXT_BLUE_BOLD + numero + "° conta não foi encontrada!" + Cores.TEXT_RESET + Cores.TEXT_BLUE_BRIGHT);
-							System.out.println("                                                 ");
-							System.out.println("*************************************************");
-						}
-
-						System.out.println(Cores.TEXT_RESET);
 
 						loop5 = false;
 
@@ -406,14 +306,129 @@ public class Menu {
 						leia.nextLine();
 						System.out.println(Cores.TEXT_RED_BOLD + "Digite um número inteiro!" + Cores.TEXT_RESET + Cores.TEXT_BLUE_BRIGHT); //Instrução
 					}
-				} while(loop5); */
+				} while(loop5);
+
+				//Buscando por uma conta especifica na collection
+				var buscarContas = contas.buscarNaCollection(numero);
+
+				if(buscarContas != null ) {
+					tipoConta = buscarContas.getTipoConta(); //Declarando o tipo de conta
+
+					//Declarando os valores das variáveis
+					//Nome do titular
+					System.out.println("Digite o nome do titular: ");
+					System.out.print(Cores.TEXT_WHITE_BOLD);
+					leia.skip("\\R?");
+					nomeTitular = leia.nextLine();
+					System.out.println(Cores.TEXT_RESET + Cores.TEXT_BLUE_BRIGHT);
+
+					//Agência do titular
+					//Criando um TryCatch para impedir que o usuário digite um valor incorreto
+					do {
+						try {
+							System.out.println("Digite o número da agência: ");
+							System.out.print(Cores.TEXT_WHITE_BOLD);
+							agenciaConta = leia.nextInt();
+							System.out.println(Cores.TEXT_RESET + Cores.TEXT_BLUE_BRIGHT);
+
+							loop6 = false;
+
+							//Caso o usuário insira um valor diferente de int, o programa não fecha, mas informa o usuário e dá a oportunidade de inserir um valor int
+						} catch (InputMismatchException e) { //Devolução de erro
+							System.out.println("                                                 ");
+							System.err.println(Cores.TEXT_RED + "Exceção: " + e + Cores.TEXT_RESET); 
+							leia.nextLine();
+							System.out.println(Cores.TEXT_RED_BOLD + "Digite um número inteiro!" + Cores.TEXT_RESET + Cores.TEXT_BLUE_BRIGHT);
+							System.out.println("                                                 ");
+						} 
+					} while(loop6);
+
+					//Saldo mensal
+					do {
+						try {
+							System.out.print("Digite o saldo mensal da conta (R$): ");
+							System.out.println(Cores.TEXT_WHITE_BOLD);
+							saldo = leia.nextFloat();
+							System.out.println(Cores.TEXT_RESET + Cores.TEXT_BLUE_BRIGHT);
+
+							loop7 = false;
+
+						} catch (InputMismatchException e) { //Devolução de erro
+							System.out.println("                                                 ");
+							System.err.println(Cores.TEXT_RED + "Exceção: " + e + Cores.TEXT_RESET); 
+							leia.nextLine();
+							System.out.println(Cores.TEXT_RED_BOLD + "Digite um número inteiro!" + Cores.TEXT_RESET + Cores.TEXT_BLUE_BRIGHT);
+							System.out.println("                                                 ");
+						} 
+					} while(loop7);
+
+					//Tipo de Conta
+					switch(tipoConta) {
+					case 1 -> {
+						do {
+							try {
+								//Limite de saque
+								System.out.print("Digite o limite de crédito da conta (R$): ");
+								System.out.println(Cores.TEXT_WHITE_BOLD);
+								limite = leia.nextFloat();
+								System.out.println(Cores.TEXT_RESET + Cores.TEXT_BLUE_BRIGHT);
+
+								System.out.println("\n");
+								//Atualiza as informações fornecidas pelo usuário, e substituí os valores que a conta possuía antes
+								contas.atualizar(new ContaCorrente(nomeTitular, agenciaConta, tipoConta, tipoConta, saldo, limite));
+								loop8 = false;
+
+							} catch (InputMismatchException e) { //Devolução de erro
+								System.out.println("                                                 ");
+								System.err.println(Cores.TEXT_RED + "Exceção: " + e + Cores.TEXT_RESET); 
+								leia.nextLine();
+								System.out.println(Cores.TEXT_RED_BOLD + "Digite um número inteiro!" + Cores.TEXT_RESET + Cores.TEXT_BLUE_BRIGHT);
+								System.out.println("                                                 ");
+							} 
+						} while(loop8);
+
+					}
+
+					case 2 -> {
+						do {
+							try {
+								//Data de aniversário da conta
+								System.out.print("Digite o dia do aniversário da conta: ");
+								System.out.println(Cores.TEXT_WHITE_BOLD);
+								dataAniversario = leia.nextInt();
+								System.out.println(Cores.TEXT_RESET + Cores.TEXT_BLUE_BRIGHT);
+
+								System.out.println("\n");
+								//Atualiza as informações fornecidas pelo usuário, e substituí os valores que a conta possuía antes
+								contas.atualizar(new ContaPoupanca(nomeTitular, agenciaConta, tipoConta, tipoConta, saldo, dataAniversario));
+
+								loop9 = false;
+
+							}catch (InputMismatchException e) { //Devolução de erro
+								System.out.println("                                                 ");
+								System.err.println(Cores.TEXT_RED + "Exceção: " + e + Cores.TEXT_RESET); 
+								leia.nextLine();
+								System.out.println(Cores.TEXT_RED_BOLD + "Digite um número inteiro!" + Cores.TEXT_RESET + Cores.TEXT_BLUE_BRIGHT);
+								System.out.println("                                                 ");
+							} 
+						} while(loop9);
+
+					}
+					} //Fim do SwitchCase
+
+				} else {
+					//Conta não encontrada
+					System.out.println(Cores.TEXT_BLUE_BOLD_BRIGHT + "\nA " + numero + "° conta não foi encontrada!" + Cores.TEXT_RESET + Cores.TEXT_BLUE_BRIGHT);
+					System.out.println("                                                 ");
+					System.out.println("*************************************************");
+				}
 
 				continuarPrograma();
 				break;
 
-			case 5:
+			case 5: //Apagar conta
 				//Variável TryCatch
-				boolean loop9 = true;
+				boolean loop10 = true;
 
 				System.out.println(Cores.TEXT_RED);
 				System.out.println("*************************************************");
@@ -428,64 +443,288 @@ public class Menu {
 						//Declarando os valor das variável número
 						System.out.print("\nDigite o número da conta que deseja deletar: ");
 						System.out.println(Cores.TEXT_WHITE_BOLD);
-						int numero = leia.nextInt();
+						numero = leia.nextInt();
 						System.out.println(Cores.TEXT_RESET + Cores.TEXT_RED);
 
 						//Deleta a conta encontrada
 						contas.deletar(numero);
 						System.out.println(Cores.TEXT_RESET);
 
-						loop9 = false;
+						loop10 = false;
 
 					} catch (InputMismatchException e) { //Devolução de erro
 						System.out.println("                                                 ");
-						System.err.println(Cores.TEXT_RED + "Exceção: " + e + Cores.TEXT_RESET); 
+						System.err.println("Exceção: " + e); 
 						leia.nextLine();
-						System.out.println(Cores.TEXT_RED_BOLD + "Digite um número inteiro!" + Cores.TEXT_RESET + Cores.TEXT_PURPLE); //Instrução
+						System.out.println(Cores.TEXT_RED_BOLD + "Digite um número inteiro!" + Cores.TEXT_RESET + Cores.TEXT_RED); //Instrução
+						System.out.println("                                                 ");
 					}
-				} while(loop9);
+				} while(loop10);
 
 				continuarPrograma();
 				break;
 
 			case 6:
+				//Variável TryCatch
+				boolean loop11 = true;
+				boolean loop12 = true;
+				boolean loop13 = true;
+				boolean loop14 = true;
+
+				System.out.println(Cores.TEXT_GREEN_BRIGHT);
+				System.out.println("*************************************************");
 				System.out.println("                                                 ");
-				System.out.println("                      Sacar                      ");
+				System.out.println("                      SACAR                      ");
 				System.out.println("                                                 ");
 				System.out.println("*************************************************");
 
+				do {
+					try {
+						//Declarando os valor das variável número
+						System.out.println("\nDigite o número da conta que deseja sacar: ");
+						System.out.println(Cores.TEXT_WHITE_BOLD);
+						numero = leia.nextInt();
+						System.out.println(Cores.TEXT_RESET + Cores.TEXT_GREEN_BRIGHT);
+
+						loop11 = false;
+
+					} catch (InputMismatchException e) { //Devolução de erro
+						System.out.println("                                                 ");
+						System.err.println(Cores.TEXT_RED + "Exceção: " + e + Cores.TEXT_RESET); 
+						leia.nextLine();
+						System.out.println(Cores.TEXT_RED_BOLD + "Digite um número inteiro!" + Cores.TEXT_RESET + Cores.TEXT_GREEN_BRIGHT); //Instrução
+						System.out.println("                                                 ");
+					}
+				} while(loop11);
+				
+				//Busca qual a conta inserida
+				var buscarContas2 = contas.buscarNaCollection(numero);
+				
+				if(buscarContas2 != null) {
+					tipoConta = buscarContas2.getTipoConta(); //Determina o tipo de conta entre corrente e poupança
+				}
+				//Criando um método de saque para cada tipo de conta
+				switch(tipoConta) {
+				//CONTA CORRENTE
+				case 1 -> {
+					/*//Informando o usuário do limite de saque que cadastrou
+					System.out.print(Cores.TEXT_GREEN_BOLD_BRIGHT + "Seu limite de saque é de: " + Cores.TEXT_RESET);
+					System.out.println(Cores.TEXT_WHITE_BOLD + limite + Cores.TEXT_RESET);*/
+
+					//Declando o valor de saque
+					do {
+						try {
+							System.out.println("\nDigite o valor que deseja sacar (R$): ");
+							System.out.println(Cores.TEXT_WHITE_BOLD);
+							valor = leia.nextFloat();
+							System.out.println(Cores.TEXT_RESET + Cores.TEXT_GREEN_BRIGHT);
+
+							loop12 = false;
+							
+						} catch (InputMismatchException e) { //Devolução de erro
+							System.out.println("                                                 ");
+							System.err.println(Cores.TEXT_RED + "Exceção: " + e + Cores.TEXT_RESET); 
+							leia.nextLine();
+							System.out.println(Cores.TEXT_RED_BOLD + "Digite um número inteiro!" + Cores.TEXT_RESET + Cores.TEXT_GREEN_BRIGHT); //Instrução
+							System.out.println("                                                 ");
+						}
+					} while(valor <= 0 && loop12);
+
+					//Realiza o método de saque
+					contas.sacar(numero, valor, limite); //Conta corrente possui limite
+				}
+				
+				//CONTA POUPANÇA
+				case 2 -> {
+					/*//Informando o usuário do saldo que cadastrou
+					System.out.print(Cores.TEXT_GREEN_BOLD_BRIGHT + "Seu saldo atual é de: " + Cores.TEXT_RESET);
+					System.out.println(Cores.TEXT_WHITE_BOLD + saldo + Cores.TEXT_RESET + Cores.TEXT_GREEN_BRIGHT);*/
+					
+					do {
+						try {
+							//Declarando os valor das variável número
+							System.out.println("\nDigite o número da conta que deseja sacar: ");
+							System.out.println(Cores.TEXT_WHITE_BOLD);
+							numero = leia.nextInt();
+							System.out.println(Cores.TEXT_RESET + Cores.TEXT_GREEN_BRIGHT);
+
+							loop14 = false;
+
+						} catch (InputMismatchException e) { //Devolução de erro
+							System.out.println("                                                 ");
+							System.err.println(Cores.TEXT_RED + "Exceção: " + e + Cores.TEXT_RESET); 
+							leia.nextLine();
+							System.out.println(Cores.TEXT_RED_BOLD + "Digite um número inteiro!" + Cores.TEXT_RESET + Cores.TEXT_GREEN_BRIGHT); //Instrução
+							System.out.println("                                                 ");
+						}
+					} while(loop14);
+					
+					//Informando o usuário do saldo que cadastrou
+					System.out.print(Cores.TEXT_GREEN_BOLD_BRIGHT + "Seu saldo atual é de: " + Cores.TEXT_RESET);
+					System.out.println(Cores.TEXT_WHITE_BOLD + saldo + Cores.TEXT_RESET + Cores.TEXT_GREEN_BRIGHT);
+
+					//Declando o valor de saque
+					do {
+						try {
+							System.out.println("\nDigite o valor que deseja sacar (R$): ");
+							System.out.println(Cores.TEXT_WHITE_BOLD);
+							valor1 = leia.nextFloat();
+							System.out.println(Cores.TEXT_RESET + Cores.TEXT_GREEN_BRIGHT);
+
+							loop13 = false;
+							
+						} catch (InputMismatchException e) { //Devolução de erro
+							System.out.println("                                                 ");
+							System.err.println(Cores.TEXT_RED + "Exceção: " + e + Cores.TEXT_RESET); 
+							leia.nextLine();
+							System.out.println(Cores.TEXT_RED_BOLD + "Digite um número inteiro!" + Cores.TEXT_RESET + Cores.TEXT_GREEN_BRIGHT); //Instrução
+							System.out.println("                                                 ");
+						}
+					} while(valor1 <= 0 && loop13);
+
+					//Realiza o método de saque
+					contas.sacarPoupanca(numero, valor1); //Não possui limite
+				}
+				} //Fim do SwitchCase
+
+				System.out.println(Cores.TEXT_RESET);
+
+				continuarPrograma();
 				break;
 
 			case 7:
+				//Variável TryCatch
+				boolean loop15 = true;
+				boolean loop16 = true;
+
+				System.out.println(Cores.TEXT_CYAN_BRIGHT);
+				System.out.println("*************************************************");
 				System.out.println("                                                 ");
-				System.out.println("                    Depositar                    ");
+				System.out.println("                    DEPOSITAR                    ");
 				System.out.println("                                                 ");
 				System.out.println("*************************************************");
+
+				do {
+					try {
+						//Declarando os valores das variáveis número
+						System.out.println("\nDigite o número da conta que deseja sacar: ");
+						System.out.println(Cores.TEXT_WHITE_BOLD);
+						numero = leia.nextInt();
+						System.out.println(Cores.TEXT_RESET + Cores.TEXT_CYAN_BRIGHT);
+
+						loop15 = false;
+
+					} catch (InputMismatchException e) { //Devolução de erro
+						System.out.println("                                                 ");
+						System.err.println(Cores.TEXT_RED + "Exceção: " + e + Cores.TEXT_RESET); 
+						leia.nextLine();
+						System.out.println(Cores.TEXT_RED_BOLD + "Digite um número inteiro!" + Cores.TEXT_RESET + Cores.TEXT_CYAN_BRIGHT); //Instrução
+						System.out.println("                                                 ");
+					}
+				} while(loop15);
+
+				//Declando o valor de depósito
+				do {
+					try {
+						System.out.println("\nDigite o valor que deseja depositar (R$): ");
+						System.out.println(Cores.TEXT_WHITE_BOLD);
+						valor = leia.nextInt();
+						System.out.println(Cores.TEXT_RESET + Cores.TEXT_CYAN_BRIGHT);
+
+						loop16 = false;
+					} catch (InputMismatchException e) { //Devolução de erro
+						System.out.println("                                                 ");
+						System.err.println(Cores.TEXT_RED + "Exceção: " + e + Cores.TEXT_RESET); 
+						leia.nextLine();
+						System.out.println(Cores.TEXT_RED_BOLD + "Digite um número inteiro!" + Cores.TEXT_RESET + Cores.TEXT_CYAN_BRIGHT); //Instrução
+						System.out.println("                                                 ");
+					}
+				} while(valor <= 0 && loop16);
+
+				//Realiza o método de depósito
+				contas.depositar(numero, valor);
+
+				System.out.println(Cores.TEXT_RESET);
 
 				continuarPrograma();
 				break;
 
 			case 8:
+				//Variável TryCatch
+				boolean loop17 = true;
+				boolean loop18 = true;
+				
+				System.out.println(Cores.TEXT_YELLOW_BRIGHT);
+				System.out.println("*************************************************");
 				System.out.println("                                                 ");
-				System.out.println("          Tranferir valores entre contas         ");
+				System.out.println("         TRANSFERIR VALORES ENTRE CONTAS         ");
 				System.out.println("                                                 ");
 				System.out.println("*************************************************");
 
+				do {
+					try {
+						//Declarando qual a conta de origem
+						System.out.println("\nDigite o número da Conta de Origem: ");
+						System.out.println(Cores.TEXT_WHITE_BOLD);
+						numero = leia.nextInt();
+						System.out.println(Cores.TEXT_RESET + Cores.TEXT_YELLOW_BRIGHT);
+						
+						//Declarando qual a conta de destino
+						System.out.println("Digite o número da Conta de Destino: ");
+						System.out.println(Cores.TEXT_WHITE_BOLD);
+						numeroDestino = leia.nextInt();
+						System.out.println(Cores.TEXT_RESET + Cores.TEXT_YELLOW_BRIGHT);
+
+						loop17 = false;
+
+					} catch (InputMismatchException e) { //Devolução de erro
+						System.out.println("                                                 ");
+						System.err.println(Cores.TEXT_RED + "Exceção: " + e + Cores.TEXT_RESET); 
+						leia.nextLine();
+						System.out.println(Cores.TEXT_RED_BOLD + "Digite um número inteiro!" + Cores.TEXT_RESET + Cores.TEXT_YELLOW_BRIGHT); //Instrução
+						System.out.println("                                                 ");
+					}
+				} while(loop17);
+				
+				//Declarando os valores da transferência
+				do {
+					try {
+						System.out.println("Digite o valor da transferência (R$): ");
+						System.out.println(Cores.TEXT_WHITE_BOLD);
+						valor = leia.nextFloat();
+						System.out.println(Cores.TEXT_RESET + Cores.TEXT_YELLOW_BRIGHT);
+
+						loop17 = false;
+
+					} catch (InputMismatchException e) { //Devolução de erro
+						System.out.println("                                                 ");
+						System.err.println(Cores.TEXT_RED + "Exceção: " + e + Cores.TEXT_RESET); 
+						leia.nextLine();
+						System.out.println(Cores.TEXT_RED_BOLD + "Digite um número inteiro!" + Cores.TEXT_RESET + Cores.TEXT_YELLOW_BRIGHT); //Instrução
+						System.out.println("                                                 ");
+					}
+				}while(valor <= 0 && loop18);
+				
+				contas.transferir(numero, numeroDestino, valor);
+				System.out.println(Cores.TEXT_RESET);
+				
 				continuarPrograma();
 				break;
 
 			case 9:
+				//Finalização do sistema
 				System.out.println(Cores.TEXT_BLUE + Cores.ANSI_BLACK_BACKGROUND);
 				System.out.println("                                                 ");
 				System.out.println("  BIANCA TRUST BANK agradeçe pela confiança ;)   ");
 				novaConta.sobre();
 				System.out.println(Cores.TEXT_RESET);
-				System.exit(0);
+				System.exit(0); //Fecha o programa
 
 				continuarPrograma();
 				break;
 
 			default:
+				//Retorno caso uma opção improvável tenha sido clicada
 				System.out.println(Cores.TEXT_RED_BOLD + "\nOpção Inválida!" + Cores.TEXT_RESET);
 				continuarPrograma();
 				break;
